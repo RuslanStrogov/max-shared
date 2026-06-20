@@ -1,10 +1,16 @@
 # max-shared
 
-Shared core library for MAX Bot API clients.
+> ⚠️ **DEPRECATED** — This library is no longer maintained.
+>
+> The shared code (models, client, converter) has been merged directly into:
+> - [max-hermes](https://github.com/RuslanStrogov/max-hermes) — standalone bridge daemon
+> - [max-hermes-plugin](https://github.com/RuslanStrogov/max-hermes-plugin) — Hermes Agent platform plugin
+>
+> This repository is kept for reference only. Use the individual projects above.
 
-## Purpose
+## Purpose (historical)
 
-This package eliminates code duplication between:
+This package eliminated code duplication between max-hermes and max-hermes-plugin.
 
 - **max-hermes** — standalone bridge daemon (aiohttp + Hermes CLI)
 - **max-hermes-plugin** — Hermes Agent platform plugin
@@ -54,3 +60,10 @@ if has_markdown(text):
 ## License
 
 MIT
+
+## Related Projects
+
+| Project | Description |
+|---------|-------------|
+| [max-hermes](https://github.com/RuslanStrogov/max-hermes) | Standalone bridge daemon — webhook, Docker, systemd |
+| [max-hermes-plugin](https://github.com/RuslanStrogov/max-hermes-plugin) | Native Hermes Agent platform plugin |
