@@ -68,4 +68,10 @@ MIT
 | [max-hermes](https://github.com/RuslanStrogov/max-hermes) | Standalone bridge daemon — webhook, Docker, systemd |
 | [max-hermes-plugin](https://github.com/RuslanStrogov/max-hermes-plugin) | Native Hermes Agent platform plugin |
 
-<!-- bumped: 2026-06-29 01:20 -->
+
+---
+<div align="center">
+
+  <sub>🇷🇺 Опенсорс — **Поддержи наш продукт** · <a href="https://br-design.ru/">BR-DESIGN</a></sub>
+
+</div>
