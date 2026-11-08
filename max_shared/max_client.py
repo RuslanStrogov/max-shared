@@ -6,6 +6,7 @@ from max-hermes-plugin (file upload, download).
 
 from __future__ import annotations
 
+import json
 import logging
 from typing import Any, Dict, List, Optional
 
@@ -89,13 +90,20 @@ class MAXClient:
         logger.debug("MAX API %s %s", method, url)
 
         try:
-            async with session.request(method, url, json=data) as resp:
+            body_bytes = json.dumps(data, ensure_ascii=False, default=str).encode("utf-8") if data else None
+            async with session.request(
+                method, url,
+                data=body_bytes,
+                headers={"Content-Type": "application/json"} if body_bytes else {},
+            ) as resp:
                 body = await resp.json(content_type=None)
                 if resp.status >= 400:
                     code = body.get("code", "unknown")
                     message = body.get("message", "Unknown error")
                     logger.error(
-                        "MAX API error: %s %s (HTTP %d)", code, message, resp.status
+                        "MAX API error: %s %s (HTTP %d) on %s %s — payload length=%d",
+                        code, message, resp.status, method, path,
+                        len(body_bytes) if body_bytes else 0,
                     )
                     raise MAXApiError(code, message, resp.status)
                 return body
@@ -238,12 +246,23 @@ class MAXClient:
         """POST /chats/{chatId}/actions — send chat action.
 
         Common actions: 'typing_on', 'typing_off'
+        Note: MAX API does NOT accept 'typing_off' — returns HTTP 400
+        with proto.payload error. This is a known server limitation.
         """
-        return await self._request(
-            "POST",
-            f"/chats/{chat_id}/actions",
-            data={"action": action},
-        )
+        try:
+            return await self._request(
+                "POST",
+                f"/chats/{chat_id}/actions",
+                data={"action": action},
+            )
+        except MAXApiError as e:
+            if action == "typing_off" and e.status_code == 400:
+                logger.warning(
+                    "MAX API rejected typing_off (known server limitation): %s",
+                    e,
+                )
+                return {"success": False, "reason": "typing_off not supported"}
+            raise
 
     # ── Callback answer ────────────────────────────────────────────────────
 
