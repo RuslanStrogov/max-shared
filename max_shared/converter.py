@@ -333,7 +333,7 @@ class MessageConverter:
 
         if user_id is not None and user_id > 0:
             payload["user_id"] = user_id
-        elif chat_id is not None and chat_id > 0:
+        elif chat_id is not None:
             payload["chat_id"] = chat_id
         else:
             logger.warning("Neither user_id nor chat_id available for response")
